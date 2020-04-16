@@ -31,9 +31,12 @@ app.get("/urls.json", (req, res) => {
 });
 ;
 
-app.get("/hello", (req, res) => {
-  res.send("<html><body>Hello <b>World</b></body></html>\n");
+app.post("/login", (req, res) => {
+  const { username } = req.body;
+  res.cookie("username", username);
+  res.redirect('/urls') 
 });
+
 
 app.get("/urls", (req, res) => {
   let templateVars = { urls: urlDatabase };
