@@ -15,6 +15,12 @@
         <button type="submit" class ="btn btn-success">Sign In</button>
       </form>
       </div>
+      <div>
+      <h5>Welcome <%= username%></h5>
+      <form method="POST" action "/logout">
+      <button type="submit" class="btn btn-light"> Logout </button>
+    </form>
+    </div>
     </div>
   </nav>
 </header>
