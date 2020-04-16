@@ -19,7 +19,7 @@ const generateRandomString = function (longURL) {
 }
 
 const updateURL = (shortURL, update) => {
-  urlDatabase[shortURL].longURL = update;
+  urlDatabase[shortURL] = update;
 }
 
 app.get("/", (req, res) => {
@@ -55,15 +55,17 @@ app.post("/urls", (req, res) => {
 
 });
 
-app.post('/urls/:shortUrl', (req, res) => {
+app.post('/urls/:shortURL', (req, res) => {
   const shortURL = req.params.shortURL;
   const update = req.body.longURL;
   updateURL(shortURL, update);
+  console.log(urlDatabase)
   res.redirect('/urls');
 });
 
-app.post('/urls/:shortUrl/delete',(req, res) => {
+app.post('/urls/:shortURL/delete',(req, res) => {
   const shortURL = req.params.shortURL;
+  console.log('here')
   delete urlDatabase[shortURL];
   res.redirect('/urls');
 });
