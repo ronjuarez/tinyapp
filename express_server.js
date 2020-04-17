@@ -47,6 +47,13 @@ const updateURL = (shortURL, update) => {
   urlDatabase[shortURL] = update;
 }
 
+const checkUser = (email) => {
+  for (user in usersDatabase) {
+    if (usersDatabase[user].email === email) {
+      res.status(400).send('Sorry, the user is already registered');
+    }
+  }
+}
 
 
 app.post("/login", (req, res) => {
@@ -83,6 +90,10 @@ app.post('/register', (req, res) => {
 
   const userID = generateRandomString();
 
+  console.log(checkUser(userEmail));
+
+  !userEmail || !userPass ?
+  res.status(400).send('Please Enter Email and Password.'):
   usersDatabase[userID] = { 
     id : userID,
     email : userEmail,
