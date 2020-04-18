@@ -105,21 +105,25 @@ app.post("/login", (req, res) => {
 
   const {  password   } = req.body;
 
+  let user = null;  
+
   for (let userID in usersDatabase) {
-    // console.log(userID);
-    if (email === usersDatabase[userID].email && password === usersDatabase[userID].password) {
-      // console.log(usersDatabase[userID].email + "is equal to" + email);
-
-      res.cookie("currentUser", userID);
-      res.cookie('currentEmail', email);
-      res.redirect('/urls');
-
-    } else if (email !== usersDatabase[userID].email) {
-
-      console.log(usersDatabase[userID].email + " is not equal to " + email);
-      res.status(403).send('Login Invalid!') 
+    if (email === usersDatabase[userID].email) {
+      user = usersDatabase[userID];
     }
-  } 
+  }
+
+  
+  if (!user || password !== user.password) {
+    res.status(403).send('Login Invalid!');
+    return;
+  }
+
+  res.cookie("currentUser", user);
+  res.cookie('currentEmail', email);
+  res.redirect('/urls');
+
+  return;
 });
 
 
