@@ -106,14 +106,16 @@ app.post("/login", (req, res) => {
   const {  password   } = req.body;
 
   for (let userID in usersDatabase) {
-    console.log(userID);
+    // console.log(userID);
     if (email === usersDatabase[userID].email && password === usersDatabase[userID].password) {
-      console.log(usersDatabase[userID].email + "is equal to" + email);
+      // console.log(usersDatabase[userID].email + "is equal to" + email);
 
       res.cookie("currentUser", userID);
       res.cookie('currentEmail', email);
       res.redirect('/urls');
+
     } else if (email !== usersDatabase[userID].email) {
+
       console.log(usersDatabase[userID].email + " is not equal to " + email);
       res.status(403).send('Login Invalid!') 
     }
@@ -153,7 +155,7 @@ app.get('/u/:shortURL', (req, res) => {
 })
 
 app.get("/urls/:shortURL", (req, res) => {
-  const templateVars = {    userID: req.cookies["currentUser"],  shortURL: req.params.shortURL, longURL: urlDatabase[req.params.shortURL] };
+  const templateVars = {   userEmail: req.cookies["currentEmail"], userID: req.cookies["currentUser"], shortURL: req.params.shortURL, longURL: urlDatabase[req.params.shortURL] };
   console.log(templateVars);
   res.render("urls_show", templateVars);
 });
