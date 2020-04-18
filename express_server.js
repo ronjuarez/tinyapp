@@ -50,7 +50,7 @@ const checkUser = (email, res) => {
 app.post('/logout', (req, res) => {
   res.clearCookie('currentUser');
   res.clearCookie('currentEmail');
-  res.redirect('/')
+  res.redirect('/urls')
 })
 
 
@@ -59,10 +59,7 @@ app.get("/urls", (req, res) => {
   res.render("urls_index", templateVars);
 });
 
-app.get('/', (req, res) => {
-  let templateVars = {  userEmail: req.cookies["currentEmail"], userID: req.cookies["currentUser"]  };
-  res.render("home", templateVars);
-}) 
+
 
 app.get("/urls/new", (req, res) => {
   let templateVars = {  userEmail: req.cookies["currentEmail"], userID: req.cookies["currentUser"]  };
@@ -105,7 +102,7 @@ app.post('/register', (req, res) => {
 });
 
 app.post("/login", (req, res) => {
-  console.log(usersDatabase);
+
   const {  email  } = req.body;
 
   const {  password   } = req.body;
