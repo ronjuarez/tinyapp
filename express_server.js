@@ -22,7 +22,7 @@ const usersDatabase = {
 
   "seU832": {
     id: "seU832",
-    email: "coding@waythoughspirals.com",
+    email: "coding@waythoughtspirals.com",
     password : "tuatara"
   }
 };
@@ -50,7 +50,7 @@ const checkUser = (email, res) => {
 app.post('/logout', (req, res) => {
   res.clearCookie('currentUser');
   res.clearCookie('currentEmail');
-  res.redirect('/urls')
+  res.redirect('/')
 })
 
 
@@ -58,6 +58,11 @@ app.get("/urls", (req, res) => {
   let templateVars = {  userEmail: req.cookies["currentEmail"], userID: req.cookies["currentUser"], urls: urlDatabase };
   res.render("urls_index", templateVars);
 });
+
+app.get('/', (req, res) => {
+  let templateVars = {  userEmail: req.cookies["currentEmail"], userID: req.cookies["currentUser"]  };
+  res.render("home", templateVars);
+}) 
 
 app.get("/urls/new", (req, res) => {
   let templateVars = {  userEmail: req.cookies["currentEmail"], userID: req.cookies["currentUser"]  };
