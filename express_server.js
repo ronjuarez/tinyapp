@@ -68,23 +68,23 @@ app.post('/logout', (req, res) => {
 
 
 app.get("/urls", (req, res) => {
-  let templateVars = { userID: req.cookies["currentUser"], urls: urlDatabase };
+  let templateVars = {  userEmail: req.cookies["currentEmail"], userID: req.cookies["currentUser"], urls: urlDatabase };
   res.render("urls_index", templateVars);
 });
 
 app.get("/urls/new", (req, res) => {
-  let templateVars = { userID: req.cookies["currentUser"]  };
+  let templateVars = {  userEmail: req.cookies["currentEmail"], userID: req.cookies["currentUser"]  };
   res.render("urls_new", templateVars);
 });
 
 app.get("/login", (req, res) => {
-  let templateVars = { userID: req.cookies["currentUser"]  };
+  let templateVars = { userEmail: req.cookies["currentEmail"], userID: req.cookies["currentUser"]  };
   res.render("login", templateVars);
 });
 
 
 app.get("/register", (req, res) => {
-  let templateVars = { userID: req.cookies["currentUser"]  };
+  let templateVars = { userEmail: req.cookies["currentEmail"], userID: req.cookies["currentUser"]  };
   res.render("register", templateVars);
 });
 
