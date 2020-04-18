@@ -37,32 +37,19 @@ const updateURL = (shortURL, update) => {
 }
 
 const checkUser = (email, res) => {
-  for (user in usersDatabase) {
-    if (usersDatabase[user].email === email) {
+  for (const userID in usersDatabase) {
+    if (usersDatabase[userID].email === email) {
       res.status(400).send('Sorry, the user is already registered');
     }
   }
 }
 
 
-app.post("/login", (req, res) => {
 
-  const {  email  } = req.body;
-  const {  password   } = req.body;
-
-  for (let userID in usersDatabase) {
-    if (email === usersDatabase[userID].email && password === usersDatabase[userID].password) {
-      res.cookie("currentUser", userID);
-      res.cookie('currentEmail', email);
-      res.redirect('/urls');
-    } else if (email !== usersDatabase[userID].email) {
-      res.status(403).send('Login Invalid!') 
-    }
-  }  
-});
 
 app.post('/logout', (req, res) => {
   res.clearCookie('currentUser');
+  res.clearCookie('currentEmail');
   res.redirect('/urls')
 })
 
@@ -98,19 +85,40 @@ app.post('/register', (req, res) => {
   console.log(checkUser(userEmail, res));
 
   !userEmail || !userPass ?
-  res.status(400).send('Please Enter Email and Password.'):
+  res.status(400).send('Registration Invalid!'):
   usersDatabase[userID] = { 
     id : userID,
     email : userEmail,
     password : userPass
    };
+   console.log(usersDatabase)
+  res.cookie('currentEmail', userEmail); 
   res.cookie("currentUser", usersDatabase[userID].id); 
   res.redirect('/urls');
 
 
 });
 
+app.post("/login", (req, res) => {
+  console.log(usersDatabase);
+  const {  email  } = req.body;
 
+  const {  password   } = req.body;
+
+  for (let userID in usersDatabase) {
+    console.log(userID);
+    if (email === usersDatabase[userID].email && password === usersDatabase[userID].password) {
+      console.log(usersDatabase[userID].email + "is equal to" + email);
+
+      res.cookie("currentUser", userID);
+      res.cookie('currentEmail', email);
+      res.redirect('/urls');
+    } else if (email !== usersDatabase[userID].email) {
+      console.log(usersDatabase[userID].email + " is not equal to " + email);
+      res.status(403).send('Login Invalid!') 
+    }
+  } 
+});
 
 
 app.post("/urls", (req, res) => {
