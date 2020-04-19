@@ -6,8 +6,8 @@
     </button>
     <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
       <div class="navbar-nav">
-        <a class="nav-item nav-link" href="/urls">My URLs</a>
-        <a class="nav-item nav-link" href="/urls/new">Create New URL</a>
+        <a class="nav-item nav-link" href="/urls/<%= userID%>">My URLs</a>
+        <a class="nav-item nav-link" href="/urls/<%= userID%>/new">Create New URL</a>
       </div>
         <% if (userID) { %>
           <div><p> Welcome Back <%= userEmail%>!</p></div>
