@@ -2,8 +2,13 @@ const express = require("express");
 const app = express();
 const PORT = 8080; 
 const cookieParser = require ('cookie-parser');
-app.use(cookieParser());
+const bcrypt = require('bcrypt');
 const bodyParser = require("body-parser");
+
+
+
+app.use(cookieParser());
+
 app.use(bodyParser.urlencoded({extended: true}));
 
 app.set("view engine", "ejs");
@@ -17,13 +22,13 @@ const usersDatabase = {
   "bhtUf8": {
     id: "bhtuf8",
     email: "shmlangela@shmloostheshmloss.com",
-    password: "plumbus"
+    password: bcrypt.hashSync('plumbus', 10)
   },
 
   "seU832": {
     id: "seU832",
     email: "coding@waythoughtspirals.com",
-    password : "tuatara"
+    password : bcrypt.hashSync('tuatara', 10)
   }
 };
 
@@ -83,6 +88,9 @@ app.post('/register', (req, res) => {
 
   const userPass = req.body.password;
 
+  const hashedPassword = bcrypt.hashSync(userPass, 10);
+  console.log(`This is the hashedPassword: ${hashedPassword}`);
+
   const userID = generateRandomString();
 
   checkUser(userEmail, res);
@@ -92,8 +100,10 @@ app.post('/register', (req, res) => {
   usersDatabase[userID] = { 
     id : userID,
     email : userEmail,
-    password : userPass
+    password : hashedPassword
    };
+
+   console.log (`This is the user password ${usersDatabase[userID].password}`);
 
   res.cookie('currentEmail', userEmail); 
   res.cookie("currentUser", usersDatabase[userID].id); 
@@ -104,19 +114,24 @@ app.post('/register', (req, res) => {
 
 app.post("/login", (req, res) => {
 
-  const {  email  } = req.body;
+  const { email } = req.body;
 
-  const {  password   } = req.body;
+  const { password } = req.body;
 
   let userID = null;  
 
+  
   for (let id in usersDatabase) {
     if (email === usersDatabase[id].email) {
       userID = usersDatabase[id];
     }
   }
   
-  if (!userID || password !== userID.password) {
+  const passAuth = bcrypt.compareSync(password, userID.password);
+
+  console.log(`Password Property: ${password}, passAuth Test Result : ${passAuth}, hashedPassword: ${userID.password}`);
+
+  if (!userID || !passAuth) {
     res.status(403).send('Login Invalid!');
     return;
   }
@@ -147,7 +162,7 @@ app.post('/urls/:id/:shortURL', (req, res) => {
   const shortURL = req.params.shortURL;
   const update = req.body.longURL;
   updateURL(shortURL, update);
-  console.log(urlDatabase)
+
   res.redirect(`/urls/${userID}`);
 });
 
@@ -176,21 +191,3 @@ app.get("/urls/:id/:shortURL", (req, res) => {
 app.listen(PORT, () => {
   console.log(`Example app listening on port ${PORT}!`);
 });
-
-// const userEmail = req.body.email;
-
-// const userPass = req.body.password;
-
-
-// // (checkUser(userEmail));
-
-// userEmail === usersDatabase[userID].email ?
-// res.status(400).send('Please Enter Email and Password.'):
-// usersDatabase[userID] = { 
-//   id : userID,
-//   email : userEmail,
-//   password : userPass
-//  };
-// res.cookie("currentUser", usersDatabase[userID].id); 
-// res.cookie('currentUser', usersDatabase[userID].email)
-// res.redirect('/urls');
