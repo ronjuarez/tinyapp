@@ -1,6 +1,5 @@
  
 <%- include('partials/_header') %>
-  <% if (user) {%> 
   <div class="card text-center">
       <div class="card-header"></div>
       <div class="card-body">
@@ -21,8 +20,5 @@
   
     <div class="card-footer text-muted"></div>
   </div>
-  <% } else { %>
-    <%- include ('partials/_notSignedIn') %>
-  <% }%>
 </body>
 </html>
