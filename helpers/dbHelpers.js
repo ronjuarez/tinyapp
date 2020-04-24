@@ -1,9 +1,4 @@
-const bcrypt = require('bcrypt');
-
-
-module.exports = (urlDatabase, usersDatabase) => {
-
-  const findUser = (id) => {
+  const findUser = (id, usersDatabase) => {
     let output = null;
     
     for (let user in usersDatabase){
@@ -16,7 +11,7 @@ module.exports = (urlDatabase, usersDatabase) => {
     return output;
   };
 
-  const getURLList = (id) =>  {
+  const getURLList = (id, urlDatabase) =>  {
     let output = { }
 
     for (let url in urlDatabase) {
@@ -34,21 +29,21 @@ module.exports = (urlDatabase, usersDatabase) => {
     return output;
   };
 
-  const updateURL = (id, url, update) => {
+  const updateURL = (id, url, update, urlDatabase) => {
     id === urlDatabase[url].userID ?
     urlDatabase[url].longURL = update:
     false;
   };
 
-  const checkUser = (email, res) => {
+  const checkUser = (email, res, usersDatabase) => {
     for (const userID in usersDatabase) {
       if (usersDatabase[userID].email === email) {
-        res.status(400).send('Sorry, the user is already registered');
+        res.status(400).send('Sorry, this user is already registered');
       };
     };
   };
 
-  const passUserAuth = (userEmail) => {
+  const passUserAuth = (userEmail, usersDatabase) => {
     let output = null;
     for (let id in usersDatabase) {
       if (userEmail === usersDatabase[id].email) { 
@@ -59,12 +54,15 @@ module.exports = (urlDatabase, usersDatabase) => {
     return output;
   };
     
-    return {
-      findUser,
-      getURLList,
-      generateRandomString,
-      updateURL,
-      checkUser,
-      passUserAuth
-    };
-};
+
+
+module.exports = {generateRandomString, getURLList, findUser, updateURL, checkUser, passUserAuth}
+    // return {
+      // findUser,
+      // getURLList,
+      
+      // updateURL,
+      // checkUser,
+      // passUserAuth
+//     };
+// };
